@@ -8,7 +8,7 @@ function isPast(date: string, startTime: string) {
     return new Date(`${date}T${startTime}:00`) <= new Date();
 }
 
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URL ?? true }));
 app.use(express.json());
 
 // Return dates/times as plain strings so the frontend doesn't deal with timezones
@@ -103,7 +103,7 @@ app.post("/slots/:id/book", async (req, res) => {
     res.json(result.rows[0]);
 });
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 initDb()
     .then(() => {
