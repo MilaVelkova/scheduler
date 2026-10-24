@@ -8,7 +8,16 @@ function isPast(date: string, startTime: string) {
     return new Date(`${date}T${startTime}:00`) <= new Date();
 }
 
-app.use(cors({ origin: process.env.FRONTEND_URL ?? true }));
+const allowedOrigins = (process.env.FRONTEND_URL ?? "")
+  .split(",")
+  .map((o) => o.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins.length ? allowedOrigins : true,
+  })
+);
 app.use(express.json());
 
 // Return dates/times as plain strings so the frontend doesn't deal with timezones
