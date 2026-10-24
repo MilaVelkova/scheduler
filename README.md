@@ -13,6 +13,16 @@ A small booking app. A host publishes time slots, and anyone can book one with t
 - Node.js 20 or newer
 - Docker Desktop (running)
 
+## What I built
+
+A booking page for a single host:
+
+- The host publishes time slots (date, start time, length of 15, 30, 45 or 60 minutes).
+- Visitors see the slots grouped by day, pick one, and book it with their name and email.
+- Booked slots are marked as taken and can't be booked again, even if two people click at the same moment.
+- Times in the past can't be published or booked.
+- Data is stored in PostgreSQL, so it persists after restarts.
+
 ## Run locally
 
 Run each step from the project root unless it says otherwise.
@@ -87,3 +97,17 @@ docker compose down
 ```
 
 Add `-v` to also delete the database data.
+
+## AI tools I used
+
+- **Claude**: I used it as a pairing partner for the whole project. It helped me write the first versions of the Express endpoints and the React components, and debug environment problems on Windows (file encoding, TypeScript config, a local Postgres that was taking over the port, Git authentication).
+- I read and tested each part before keeping it. I wrote and checked the SQL for booking myself, and I tested the double-booking protection by sending the same booking twice with Postman and seeing the `409` response.
+
+## What I would improve with more time
+
+- **Host protection**: right now anyone can publish slots because there is no login. I would add a simple host password or login and a separate host page.
+- **Host view of bookings**: a protected endpoint and page showing who booked which slot, including their email.
+- **Cancel and edit**: let the host delete or change a slot, and let a guest cancel their booking.
+- **Time zones**: the app assumes one time zone. I would store times in UTC and show them in each visitor's time zone.
+- **Email confirmation**: send the guest a confirmation email, with a short friendly message written by an LLM (for example Gemini).
+- **Google Calendar**: hide slots that clash with existing calendar events.
