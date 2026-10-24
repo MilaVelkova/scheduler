@@ -111,3 +111,9 @@ Add `-v` to also delete the database data.
 - **Time zones**: the app assumes one time zone. I would store times in UTC and show them in each visitor's time zone.
 - **Email confirmation**: send the guest a confirmation email, with a short friendly message written by an LLM (for example Gemini).
 - **Google Calendar**: hide slots that clash with existing calendar events.
+
+## Live demo
+
+https://scheduler-sable-five.vercel.app/
+
+The backend runs on Render's free tier, so the first load after a period of inactivity can take up to a minute.
