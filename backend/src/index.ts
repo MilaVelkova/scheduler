@@ -9,14 +9,23 @@ function isPast(date: string, startTime: string) {
 }
 
 const allowedOrigins = (process.env.FRONTEND_URL ?? "")
-  .split(",")
-  .map((o) => o.trim().replace(/\/$/, ""))
-  .filter(Boolean);
+    .split(",")
+    .map((o) => o.trim().replace(/\/$/, ""))
+    .filter(Boolean)
+    .map((o) => (/^https?:\/\//.test(o) ? o : `https://${o}`));
+
+// Every Vercel deployment of this project: scheduler-<hash>-mila-41d7.vercel.app
+const vercelDeployment = /^https:\/\/scheduler-[a-z0-9-]*mila-41d7\.vercel\.app$/;
 
 app.use(
-  cors({
-    origin: allowedOrigins.length ? allowedOrigins : true,
-  })
+    cors({
+        origin(origin, callback) {
+            // no origin = Postman, curl, or direct browser visits
+            if (!origin) return callback(null, true);
+            const ok = allowedOrigins.includes(origin) || vercelDeployment.test(origin);
+            callback(null, ok);
+        },
+    })
 );
 app.use(express.json());
 
